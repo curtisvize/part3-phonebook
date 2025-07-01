@@ -4,13 +4,12 @@ const cors = require('cors')
 const app = express()
 
 morgan.token('post-body', (req) => {
-    //console.log(req.body)
     return JSON.stringify(req.body)
 })
 
 app.use(express.json())
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :post-body'))
-app.use(cors())
+app.use(express.static('dist'))
 
 let persons = [
     { 
@@ -69,8 +68,6 @@ app.delete('/api/persons/:id', (req, res) => {
 
 app.post('/api/persons', (req, res) => {
     const body = req.body
-    //console.log('persons.find:', persons.find(p => p.name.includes(body.name)))
-    //console.log('persons:', persons)
 
     if (!body.name || !body.number) {
         return res.status(400).json({
@@ -81,7 +78,7 @@ app.post('/api/persons', (req, res) => {
             error: 'name must be unique'
         })
     }
-    //console.log('if statement logic not met, adding...')
+    
     const person = {
         id: String(Math.floor(Math.random() * 10000)),
         name: body.name,
@@ -89,7 +86,6 @@ app.post('/api/persons', (req, res) => {
     }
     
     persons = persons.concat(person)
-    //console.log('persons after concat:', persons)
 
     res.json(person)
 })
