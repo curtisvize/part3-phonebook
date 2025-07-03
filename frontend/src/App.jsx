@@ -103,7 +103,6 @@ const App = () => {
             setTimeout(() => { setNotificationMessage(null) }, 5000)
           })
           .catch(error => {
-            console.log(error)
             if (error.response.statusText === 'Not Found') {
               setNotificationMessage({
                 text: `Information of ${existingPerson.name} has already been removed from the server`,
