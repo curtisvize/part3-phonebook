@@ -103,12 +103,20 @@ const App = () => {
             setTimeout(() => { setNotificationMessage(null) }, 5000)
           })
           .catch(error => {
-            setNotificationMessage({
-              text: `Information of ${existingPerson.name} has already been removed from the server`,
-              type: 'error'
-            })
+            console.log(error)
+            if (error.response.statusText === 'Not Found') {
+              setNotificationMessage({
+                text: `Information of ${existingPerson.name} has already been removed from the server`,
+                type: 'error'
+              })
+              setPersons(persons.filter(p => p.id !== existingPerson.id))
+            } else {
+              setNotificationMessage({
+                text: error.response.data.error,
+                type: 'error'
+              })
+            }
             setTimeout(() => { setNotificationMessage(null) }, 5000)
-            setPersons(persons.filter(p => p.id !== existingPerson.id))
           })
       }
     } else {
@@ -124,7 +132,13 @@ const App = () => {
           })
           setTimeout(() => { setNotificationMessage(null) }, 5000)
         })
-
+        .catch(error => {
+          setNotificationMessage({
+            text: error.response.data.error,
+            type: 'error'
+          })
+          setTimeout(() => { setNotificationMessage(null) }, 5000)
+        })
     }
   }
 
